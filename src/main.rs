@@ -1,20 +1,23 @@
 use anyhow::Result;
 use clap::Parser;
 
-use cli::CliArguments;
+use args::CliArguments;
 use log::LevelFilter;
 use pretty_env_logger::env_logger::Builder;
 
-mod cli;
+mod args;
+mod check;
 
 fn main() -> Result<()> {
     // Read any .env files
     dotenv::dotenv().ok();
     // Parse commandline options.
-    let opt = CliArguments::parse();
+    let args = CliArguments::parse();
 
     // Initalize everything
-    init_app(opt.verbose)?;
+    init_app(args.verbose)?;
+
+    check::check_directory(args.path)?;
 
     Ok(())
 }

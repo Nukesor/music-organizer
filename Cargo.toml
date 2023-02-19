@@ -1,8 +1,8 @@
 [package]
-name = "rust-boilerplate"
+name = "organizer"
+description = "A organization helper for my music library"
 version = "0.1.0"
 edition = "2021"
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 anyhow = "1"
@@ -21,4 +21,3 @@ strum_macros = "0.24"
 [dev-dependencies]
 pretty_assertions = "1"
 rstest = "0.16"
-rstest_reuse = "0.3"
