@@ -1,4 +1,4 @@
-use std::{fs::DirEntry, path::PathBuf};
+use std::{collections::VecDeque, fs::DirEntry, path::PathBuf};
 
 use anyhow::{Context, Result};
 
@@ -21,14 +21,14 @@ pub fn check_directory(path: PathBuf) -> Result<()> {
     Ok(())
 }
 
-/// Check, if the name of a releaes matches the expected format.
+/// Check, if the name of a release matches the expected format.
 pub fn check_release_name(path: &PathBuf) -> Result<()> {
     let name = path.file_name().context(format!(
         "Failed to get filename of directory at path {path:?}"
     ))?;
 
     // Split the name of the release into its respective parts.
-    let parts: Vec<String> = name
+    let mut parts: VecDeque<String> = name
         .to_string_lossy()
         .split(" - ")
         .map(|name| name.to_string())
@@ -39,22 +39,22 @@ pub fn check_release_name(path: &PathBuf) -> Result<()> {
         println!("Release {name:?} has {} instead of 6 parts", parts.len());
     }
 
-    let Some(artist) = parts.remove(0) else {
+    let Some(artist) = parts.pop_front() else {
         return Ok(());
     };
 
-    let Some(release_name) = parts.remove(0) else {
+    let Some(release_name) = parts.pop_front() else {
         return Ok(());
     };
 
-    let Some(release_id) = parts.remove(0) else {
+    let Some(release_id) = parts.pop_front() else {
         return Ok(());
     };
 
-    let Some(year) = parts.remove(0) else {
+    let Some(year) = parts.pop_front() else {
         return Ok(());
     };
-    let year: u32 = match year.strip().parse() {
+    let year: u32 = match year.trim().parse() {
         Ok(year) => year,
         Err(error) => {
             println!("Failed to parse {year} as a year on release {name:?}");
