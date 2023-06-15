@@ -57,6 +57,7 @@ pub fn get_release_name(releases: &mut Vec<Release>, path: &PathBuf) -> Result<(
     // Check if the release name has the expected amount of parts
     if parts.len() != 6 {
         println!("Release '{name:?}' has {} instead of 6 parts", parts.len());
+        return Ok(());
     }
 
     let artist = parts.pop_front().unwrap();
