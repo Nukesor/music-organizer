@@ -2,11 +2,13 @@ use anyhow::Result;
 use clap::Parser;
 
 use args::CliArguments;
+use confique::Config;
 use log::LevelFilter;
 use pretty_env_logger::env_logger::Builder;
 
 mod args;
 mod check;
+mod config;
 
 fn main() -> Result<()> {
     // Read any .env files
@@ -16,6 +18,14 @@ fn main() -> Result<()> {
 
     // Initalize everything
     init_app(args.verbose)?;
+
+    // Read the config from the environment by default.
+    // Also read from the configuration, if we find a config directory.
+    let mut config_builder = config::Config::builder().env();
+    if let Some(config_dir) = dirs::config_dir() {
+        config_builder = config_builder.file(config_dir.join("organizer.yml"));
+    }
+    let config = config_builder.load()?;
 
     check::check_directory(args.path)?;
 
