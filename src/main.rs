@@ -9,6 +9,7 @@ use pretty_env_logger::env_logger::Builder;
 mod args;
 mod check;
 mod config;
+mod models;
 
 fn main() -> Result<()> {
     // Read any .env files
@@ -27,7 +28,7 @@ fn main() -> Result<()> {
     }
     let config = config_builder.load()?;
 
-    check::check_directory(args.path)?;
+    check::check_directory(config.source_directory())?;
 
     Ok(())
 }
