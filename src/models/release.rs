@@ -1,4 +1,4 @@
-use strum_macros::EnumString;
+use strum::EnumString;
 
 #[derive(EnumString)]
 #[allow(non_camel_case_types)]
